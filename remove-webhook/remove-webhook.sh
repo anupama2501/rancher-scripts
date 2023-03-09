@@ -7,7 +7,7 @@ fi
 
 usage() {
     echo "./remove-webhook.sh"
-    echo "Remove the webhook chart in all clusters managed by rancher (including the local cluster)"
+    echo "Remove the webhook chart in all clusters managed by rancher (excluding the local cluster)"
     echo "Requires kubectl and helm to be installed and available on $PATH"
     echo "RANCHER_TOKEN must be set with an admin token generated with no scope"
     echo "RANCHER_URL must be set with the url of rancher (no trailing /) - should be the server URL"
