@@ -17,6 +17,7 @@ read -s RANCHER_TOKEN && export RANCHER_TOKEN
 read -s RANCHER_URL && export RANCHER_URL
 bash remove-webhook.sh
 ```
+For Rancher setups using self-signed certificates, you can specify `--insecure-skip-tls-verify` to force the script to ignore TLS certificate verification. Note that this option is insecure, and should be avoided for production setups.
 
 ## Notes
 - The webhook is automatically deployed by rancher in all clusters
