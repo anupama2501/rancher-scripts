@@ -6,19 +6,22 @@ then
 fi
 
 usage() {
-    echo "./remove-webhook.sh"
+    echo "./remove-webhook.sh [--insecure-skip-tls-verify]"
     echo "Remove the webhook chart in all clusters managed by rancher (excluding the local cluster)"
-    echo "Requires kubectl and helm to be installed and available on $PATH"
+    echo "Requires kubectl and helm to be installed and available on \$PATH"
+    echo "--insecure-skip-tls-verify can be set to configure the script to ignore tls verification"
     echo "RANCHER_TOKEN must be set with an admin token generated with no scope"
     echo "RANCHER_URL must be set with the url of rancher (no trailing /) - should be the server URL"
 }
 
-if [[ "$RANCHER_TOKEN" == "" || "$RANCHER_URL" == "" ]]
+if [[ -z "$RANCHER_TOKEN" || -z "$RANCHER_URL" ]]
 then
 	echo "Env vars not properly set"
 	usage
 	exit -1
 fi
+
+tlsVerify="$1"
 
 kubeconfig="
 apiVersion: v1
@@ -48,6 +51,11 @@ echo "$kubeconfig" >> .temp_kubeconfig.yaml
 chmod g-r .temp_kubeconfig.yaml
 chmod o-r .temp_kubeconfig.yaml
 export KUBECONFIG="$(pwd)/.temp_kubeconfig.yaml"
+
+if [[ "$tlsVerify" != "" ]]
+then
+	kubectl config set clusters.local.insecure-skip-tls-verify true 
+fi
 
 clusters=$(kubectl get clusters.management.cattle.io -o jsonpath="{.items[*].metadata.name}")
 for cluster in $clusters
