@@ -1,12 +1,6 @@
-## Remove-webhook
+## Upgrade-webhook
 
-Script to remove the rancher-webhook from downstream clusters.
-
-## Background
-
-The rancher webhook was added to downstream clusters beginning with rancher v2.7.2. 
-On a rollback from a version >= 2.7.2 to a version < 2.7.2, the webhook will stay in the downstream clusters. 
-Since each version of the webhook is 1-1 compatible with a specific version of rancher, this can result in unexpected behavior.
+Script to upgrade the rancher-webhook on local and downstream clusters.
 
 ## Usage
 
@@ -17,10 +11,10 @@ read -s RANCHER_TOKEN && export RANCHER_TOKEN
 read -s RANCHER_URL && export RANCHER_URL
 ## Webhook image that we want to upgrade the current webhook deployment to
 read -s WEBHOOK_IMAGE && export WEBHOOK_IMAGE
-bash remove-webhook.sh
+bash upgrade-webhook.sh
 ```
 For Rancher setups using self-signed certificates, you can specify `--insecure-skip-tls-verify` to force the script to ignore TLS certificate verification. Note that this option is insecure, and should be avoided for production setups.
 
 ## Notes
 - The webhook is automatically deployed by rancher in all clusters
-- This script should be run after rolling-back to the desired version (i.e. if going from 2.7.2 -> 2.7.0, only run this script after 2.7.0 is running)
+
